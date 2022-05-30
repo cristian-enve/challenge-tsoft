@@ -27,9 +27,20 @@ pipeline{
 
         stage('Upload to Nexus'){
             steps{
-                nexusPublisher nexusInstanceId: 'nexus3', 
+                nexusPublisher nexusInstanceId: 'challenge-tsoft',
                 nexusRepositoryId: 'challenge-tsoft', 
-                packages: []
+                packages: [[
+                    $class: 'MavenPackage', 
+                        mavenAssetList: [
+                            [classifier: '', extension: '', filePath: 'challenge-tsoft.jar']
+                        ], 
+                    mavenCoordinate: [
+                        artifactId: 'jenkins-job', 
+                        groupId: 'challenge-tsoft', 
+                        packaging: 'jar', 
+                        version: '1.0'
+                    ]
+                ]]
             }
         }
     }
