@@ -27,14 +27,9 @@ pipeline{
 
         stage('Upload to Nexus'){
             steps{
-                nexusArtifactUploader 
-                credentialsId: '751bc9e5-4167-408f-875d-162829773daf', 
-                groupId: 'challenge-tsoft', 
-                nexusUrl: '192.168.0.226:8081', 
-                nexusVersion: 'nexus3', 
-                protocol: 'http', 
-                repository: 'challenge-tsoft', 
-                version: '1.0'
+                nexusPublisher nexusInstanceId: 'nexus3', 
+                nexusRepositoryId: 'challenge-tsoft', 
+                packages: []
             }
         }
     }
