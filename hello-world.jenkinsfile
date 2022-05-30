@@ -3,7 +3,7 @@ pipeline {
     stages {       
         stage('Hello') {
             steps {
-                echo 'Hello World'
+                echo 'Hello World!'
             }
         }
 
@@ -13,6 +13,13 @@ pipeline {
             }
         }
 
-        
+        stage('Load & Print') {
+            steps {
+                script {
+                    def dummy = readFile (file: 'dummy.txt')
+                    println(dummy)
+                }
+            }
+        }
     }
 }
