@@ -27,7 +27,7 @@ pipeline{
 
         stage('Upload to Nexus'){
             steps{
-                nexusPublisher nexusInstanceId: 'nexus3', 
+                nexusPublisher nexusInstanceId: 'Nexus', 
                 nexusRepositoryId: 'challenge-tsoft', 
                 packages: []
             }
