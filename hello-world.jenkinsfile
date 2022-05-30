@@ -13,13 +13,6 @@ pipeline {
             }
         }
 
-        stage('Load & Print') {
-            steps {
-                script {
-                    def dummy = readFile (file: 'dummy.txt')
-                    println(dummy)
-                }
-            }
-        }
+        
     }
 }
