@@ -1,24 +1,40 @@
-pipeline {
+pipeline{
     agent any
-    stages {       
-        stage('Hello') {
-            steps {
+    tools{
+        maven 'maven2'
+    }
+    stages{       
+        stage('Hello'){
+            steps{
                 echo 'Hello World!'
             }
         }
 
-        stage('World') {
-            steps {
+        stage('World'){
+            steps{
                 echo 'World Hello!!!!!'
             }
         }
 
-        stage('Load & Print') {
-            steps {
-                script {
+        stage('Load & Print'){
+            steps{
+                script{
                     def dummy = readFile (file: 'dummy.txt')
                     println(dummy)
                 }
+            }
+        }
+
+        stage('Upload to Nexus'){
+            steps{
+                nexusArtifactUploader 
+                credentialsId: 'e00962ab-b3bf-4228-9199-383aa2b9aa00', 
+                groupId: 'challenge-tsoft', 
+                nexusUrl: '192.168.0.226', 
+                nexusVersion: 'nexus3', 
+                protocol: 'http', 
+                repository: 'challenge-tsoft', 
+                version: '1.0'
             }
         }
     }
