@@ -1,18 +1,37 @@
 pipeline{
     agent any
+
+    environment {
+        //TODO # 1 --> once you sign up for Docker hub, use that user_id here
+        registry = "ananthkannan/myphp-app-may20"
+        //TODO #2 - update your credentials ID after creating credentials for connecting to Docker Hub
+        registryCredential = 'fa32f95a-2d3e-4c7b-8f34-11bcc0191d70'
+        dockerImage = ''
+    }
+
     tools{
         maven 'Maven'
     }
     stages{       
-        stage('Hello'){
+        stage('Check out Git'){
+            checkout([$class: 'GitSCM', branches: [[name: '**']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/cristian-enve/challenge-tsoft']]])
+        }
+        
+        stage('Building image'){
             steps{
-                echo 'Hello World!'
+                script{
+                    dockerImage = docker.build registry
+                }
             }
         }
 
-        stage('World'){
-            steps{
-                echo 'World Hello!!!!!'
+        stage('Upload Image') {
+            steps{    
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                    dockerImage.push()
+                    }
+                }
             }
         }
 
@@ -25,23 +44,6 @@ pipeline{
             }
         }
 
-        stage('Upload to Nexus'){
-            steps{
-                nexusPublisher nexusInstanceId: 'challenge-tsoft',
-                nexusRepositoryId: 'challenge-tsoft', 
-                packages: [[
-                    $class: 'MavenPackage', 
-                        mavenAssetList: [
-                            [classifier: '', extension: '', filePath: 'challenge-tsoft.jar']
-                        ], 
-                    mavenCoordinate: [
-                        artifactId: 'jenkins-job', 
-                        groupId: 'challenge-tsoft', 
-                        packaging: 'jar', 
-                        version: '1.0'
-                    ]
-                ]]
-            }
-        }
+        
     }
 }
