@@ -1,21 +1,21 @@
 pipeline{
     agent any
-
     tools{
         maven 'Maven'
     }
-    
     stages{       
         stage('Hello'){
             steps{
                 echo 'Hello World!'
             }
         }
+
         stage('World'){
             steps{
                 echo 'World Hello!!!!!'
             }
         }
+
         stage('Load & Print'){
             steps{
                 script{
@@ -24,22 +24,12 @@ pipeline{
                 }
             }
         }
+
         stage('Upload to Nexus'){
             steps{
-                nexusPublisher nexusInstanceId: 'challenge-tsoft',
+                nexusPublisher nexusInstanceId: 'nexus3', 
                 nexusRepositoryId: 'challenge-tsoft', 
-                packages: [[
-                    $class: 'MavenPackage', 
-                        mavenAssetList: [
-                            [classifier: '', extension: '', filePath: 'challenge-tsoft.jar']
-                        ], 
-                    mavenCoordinate: [
-                        artifactId: 'jenkins-job', 
-                        groupId: 'challenge-tsoft', 
-                        packaging: 'jar', 
-                        version: '1.0'
-                    ]
-                ]]
+                packages: []
             }
         }
     }
