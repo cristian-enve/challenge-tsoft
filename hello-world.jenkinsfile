@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    stages {
+    stages {       
         stage('Hello') {
             steps {
                 echo 'Hello World'
@@ -10,6 +10,15 @@ pipeline {
         stage('World') {
             steps {
                 echo 'World Hello!!!!!'
+            }
+        }
+
+        stage('Load & Print') {
+            steps {
+                script {
+                    def dummy = readFile (file: 'dummy.txt')
+                    println(dummy)
+                }
             }
         }
     }
