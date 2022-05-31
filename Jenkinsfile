@@ -26,10 +26,4 @@ node {
         def dummy = readFile (file: 'dummy.txt')
         println(dummy)
     }
-
-    stage('Upload to Nexus'){
-            nexusPublisher nexusInstanceId: 'nexus', 
-            nexusRepositoryId: 'challenge-tsoft', 
-            packages: []
-    }
 }
