@@ -1,47 +1,35 @@
-pipeline{
-    agent any
-    stages{
-        stage('Load & Print'){
-            steps{
-                script{
-                    def dummy = readFile (file: 'dummy.txt')
-                    println(dummy)
-                }
-            }
-        }
-
-        stage('Upload to Nexus'){
-            steps{
-                nexusPublisher nexusInstanceId: 'nexus', 
-                nexusRepositoryId: 'challenge-tsoft', 
-                packages: []
-            }
-        }
+node {
+    def app
+    
+    stage('Clone repository') {
+        /* Let's make sure we have the repository cloned to our workspace */
+        checkout scm
     }
 
-    node {
-        def app
+    stage('Build image') {
+        /* This builds the actual image; synonymous to
+        * docker build on the command line */
 
-        stage('Clone repository') {
-            /* Let's make sure we have the repository cloned to our workspace */
+        app = docker.build("getintodevops/hellonode")
+    }
 
-            checkout scm
+    stage('Test image') {
+        /* Ideally, we would run a test framework against our image.
+        * For this example, we're using a Volkswagen-type approach ;-) */
+
+        app.inside {
+            sh 'echo "Tests passed"'
         }
+    }
+    
+    stage('Load & Print'){
+        def dummy = readFile (file: 'dummy.txt')
+        println(dummy)
+    }
 
-        stage('Build image') {
-            /* This builds the actual image; synonymous to
-            * docker build on the command line */
-
-            app = docker.build("getintodevops/hellonode")
-        }
-
-        stage('Test image') {
-            /* Ideally, we would run a test framework against our image.
-            * For this example, we're using a Volkswagen-type approach ;-) */
-
-            app.inside {
-                sh 'echo "Tests passed"'
-            }
-        }
+    stage('Upload to Nexus'){
+            nexusPublisher nexusInstanceId: 'nexus', 
+            nexusRepositoryId: 'challenge-tsoft', 
+            packages: []
     }
 }
