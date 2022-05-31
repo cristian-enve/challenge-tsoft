@@ -26,6 +26,7 @@ node {
 
 pipeline{
     agent any
+    stages{
     stage('Load & Print'){
         steps{
             script{
@@ -41,5 +42,6 @@ pipeline{
             nexusRepositoryId: 'challenge-tsoft', 
             packages: []
         }
+    }
     }
 }
