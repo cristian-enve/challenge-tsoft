@@ -22,21 +22,24 @@ node {
             sh 'echo "Tests passed"'
         }
     }
-stage('Load & Print'){
-            steps{
-                script{
-                    def dummy = readFile (file: 'dummy.txt')
-                    println(dummy)
-                }
+}
+
+pipeline{
+    agent any
+    stage('Load & Print'){
+        steps{
+            script{
+                def dummy = readFile (file: 'dummy.txt')
+                println(dummy)
             }
         }
+    }
 
-        stage('Upload to Nexus'){
-            steps{
-                nexusPublisher nexusInstanceId: 'Nexus', 
-                nexusRepositoryId: 'challenge-tsoft', 
-                packages: []
-            }
+    stage('Upload to Nexus'){
+        steps{
+            nexusPublisher nexusInstanceId: 'Nexus', 
+            nexusRepositoryId: 'challenge-tsoft', 
+            packages: []
         }
-
+    }
 }
