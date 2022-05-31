@@ -18,7 +18,7 @@ node {
         * For this example, we're using a Volkswagen-type approach ;-) */
 
         app.inside {
-            sh 'echo "Tests passed!"'
+            sh 'echo "Tests passed! Examen pasado!"'
         }
     }
     
@@ -27,5 +27,11 @@ node {
         println(dummy)
     }
 
-    
+   stage('Upload to Nexus'){
+        steps {
+            script{
+            sh 'docker login -u admin -p password 192.168.0.226:8085'
+            sh 'docker push getintodevops/hellonode'}
+        }
+    } 
 }
